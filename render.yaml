@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: jess-ai
+    runtime: python
+    buildCommand: poetry install --no-dev
+    startCommand: poetry run uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jessai-db
+          property: connectionString
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: ADMIN_API_KEY
+        generateValue: true
+    plan: free
+
+databases:
+  - name: jessai-db
+    plan: free
+    databaseName: jessai
+    user: jessai
